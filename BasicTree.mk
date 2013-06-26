@@ -1,9 +1,9 @@
 CXX = g++ -std=gnu++11
-CXXFLAGS = -Wall -g -D BASICSYNTAXTREE_UNIT_TEST
+CXXFLAGS = -Wall -g -D BASICTREE_UNIT_TEST
 INCLUDES = 
 LIBS =
-OBJS = BasicSyntaxTree.o
-PROGRAM = BasicSyntaxTree.out
+OBJS = BasicTree.o
+PROGRAM = BasicTree.out
 
 all:$(PROGRAM)
 

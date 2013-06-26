@@ -1,11 +1,11 @@
 #pragma once
-//BasicSyntaxTree:20130614
+//BasicTree:20130614
 #include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
 
-namespace sample
+namespace semantia
 {
 /*
 auto ToString(const Token& token) -> std::string {
@@ -16,16 +16,16 @@ auto ToString(const Token& token) -> std::string {
 */
 
 template<class Value>
-class BasicSyntaxTree{
+class BasicTree{
 public:
-	using Ptr = std::shared_ptr<BasicSyntaxTree>;
+	using Ptr = std::shared_ptr<BasicTree>;
 	using ValueToString = std::function<std::string (const Value& value)>;
 
 	static auto Create(const Value& token) -> Ptr {
-		return Ptr(new BasicSyntaxTree<Value>(token));		
+		return Ptr(new BasicTree<Value>(token));		
 	}
 
-	auto AddChild(const BasicSyntaxTree::Ptr& child_node) -> void {
+	auto AddChild(const BasicTree::Ptr& child_node) -> void {
 		child_tree_list_.push_back(child_node);
 	}
 
@@ -59,11 +59,11 @@ public:
 		return result;
 	}
 private:
-    BasicSyntaxTree() : value_(), child_tree_list_(){}
-    BasicSyntaxTree(const Value& value) : value_(value), child_tree_list_() {}
+    BasicTree() : value_(), child_tree_list_(){}
+    BasicTree(const Value& value) : value_(value), child_tree_list_() {}
 
 	Value value_;
-	std::vector<BasicSyntaxTree::Ptr> child_tree_list_;
+	std::vector<BasicTree::Ptr> child_tree_list_;
 
 };
 }

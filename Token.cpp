@@ -1,5 +1,5 @@
-#ifdef WORD_UNIT_TEST
-#include "Word.h"
+#ifdef TOKEN_UNIT_TEST
+#include "Token.h"
 #include <iostream>
 
 using namespace semantia;

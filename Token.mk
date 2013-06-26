@@ -1,9 +1,9 @@
 CXX = g++ -std=gnu++11
-CXXFLAGS = -Wall -g -D WORD_UNIT_TEST
+CXXFLAGS = -Wall -g -D TOKEN_UNIT_TEST
 INCLUDES = 
 LIBS =
-OBJS = Word.o
-PROGRAM = Word.out
+OBJS = Token.o
+PROGRAM = Token.out
 
 all:$(PROGRAM)
 

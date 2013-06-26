@@ -1,11 +1,8 @@
-#ifdef BASICSYNTAXTREE_UNIT_TEST
-#include "BasicSyntaxTree.h"
+#ifdef BASICTREE_UNIT_TEST
+#include "BasicTree.h"
 #include <iostream>
-#include "Lexer.h"
-#include "Token.h"
 
-using namespace sample;
-using SyntaxTree = BasicSyntaxTree<parsia::Token>;
+using namespace semantia;
 int main(int argc, char* argv[])
 {
 	auto child1 = SyntaxTree::Create(parsia::Token(
