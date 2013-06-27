@@ -9,13 +9,16 @@ namespace semantia
 {
 class SyntaxTreeStream{
 public:
-    SyntaxTreeStream(const SyntaxTree::Ptr& root) : buffer_(), walker_(root){}
+	using Ptr = std::shared_ptr<SyntaxTreeStream>;
+	static auto Create(const SyntaxTree::Ptr& root) -> Ptr {
+		return Ptr(new SyntaxTreeStream(root));
+	}
 
 	auto GetNextToken() -> Token {
 		if(buffer_.empty()){
 			const auto child = walker_.StepDown();
 			if(child){
-				buffer_.push_back(Token::STEP_DOWN_TOKEN());
+				buffer_.push_back(Token::STEP_DOWN());
 				buffer_.push_back(GetToken(child));
 				const auto front = buffer_.front();
 				buffer_.pop_front();
@@ -24,23 +27,23 @@ public:
 
 			const auto parent = walker_.StepUp();
 			if(parent){
-				buffer_.push_back(Token::STEP_UP_TOKEN());
+				buffer_.push_back(Token::STEP_UP());
 				buffer_.push_back(GetToken(parent));
 				const auto front = buffer_.front();
 				buffer_.pop_front();
 				return front;
 			}
 
-			return Token(TokenType("SEMANTIA_EOF_TOKEN"), Word("EOF"));
+			return Token::SEMANTIA_EOF_TOKEN();
 		}
 		const auto next = buffer_.front();
 		buffer_.pop_front();
 		return next;
 	}
 
-    ~SyntaxTreeStream(){}
-
 private:
+    SyntaxTreeStream(const SyntaxTree::Ptr& root) : buffer_(), walker_(root){}
+	
 	std::deque<Token> buffer_;
 	SyntaxTreeWalker walker_;
 

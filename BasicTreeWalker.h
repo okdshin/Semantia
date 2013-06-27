@@ -24,11 +24,13 @@ public:
 
 	auto DebugPrint(const std::string& message) -> void {
 		std::cout << message << std::endl << "\t";	
+		std::cout << partial_tree_path_.back()->ToString(value_to_string_);
+		/*
 		for(unsigned int i = 0; i < partial_tree_path_.size(); ++i){
 			if(i+1 == partial_tree_path_.size()){
 				std::cout << "[";
 			}
-			std::cout << partial_tree_path_.at(i)->ToString(value_to_string_);
+			//std::cout << partial_tree_path_.at(i)->ToString(value_to_string_);
 			if(i+1 == partial_tree_path_.size()){
 				std::cout << "]";
 			}
@@ -36,6 +38,7 @@ public:
 				std::cout << " ";	
 			}
 		}
+		*/
 		std::cout << std::endl;
 	}
 

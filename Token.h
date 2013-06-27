@@ -9,6 +9,17 @@ public:
 	TokenType() : token_type_str(){}
 	TokenType(const std::string& token_type_str) : token_type_str(token_type_str){}
 
+	static auto SEMANTIA_EOF_TOKEN_TYPE() -> TokenType {
+		return TokenType("SEMANTIA_EOF");
+	}
+	
+	static auto STEP_DOWN_TOKEN_TYPE() -> TokenType {
+		return TokenType("STEP_DOWN");
+	}
+	
+	static auto STEP_UP_TOKEN_TYPE() -> TokenType {
+		return TokenType("STEP_UP");
+	}
 	auto ToString()const -> std::string {
 		return token_type_str;	
 	}
@@ -52,12 +63,16 @@ public:
 	Token(const TokenType& type, const Word& word) 
 		: type_(type), word_(word){}
 	
-	static auto STEP_DOWN_TOKEN() -> Token {
-		return Token(TokenType("SEMANTIA_STEP_DOWN"), Word("STEP_DOWN"));
+	static auto SEMANTIA_EOF_TOKEN() -> Token {
+		return Token(TokenType::SEMANTIA_EOF_TOKEN_TYPE(), Word("SEMANTIA_EOF"));
 	}
 	
-	static auto STEP_UP_TOKEN() -> Token {
-		return Token(TokenType("SEMANTIA_STEP_UP"), Word("STEP_UP"));
+	static auto STEP_DOWN() -> Token {
+		return Token(TokenType::STEP_DOWN_TOKEN_TYPE(), Word("STEP_DOWN"));
+	}
+	
+	static auto STEP_UP() -> Token {
+		return Token(TokenType::STEP_UP_TOKEN_TYPE(), Word("STEP_UP"));
 	}
 
 	auto GetType()const -> TokenType {
