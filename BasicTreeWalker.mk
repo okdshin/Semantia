@@ -1,9 +1,9 @@
 CXX = g++ -std=gnu++11
-CXXFLAGS = -Wall -g -D TREESTREAM_UNIT_TEST
+CXXFLAGS = -Wall -g -D BASICTREEWALKER_UNIT_TEST
 INCLUDES = 
-LIBS =
-OBJS = TreeStream.o
-PROGRAM = TreeStream.out
+LIBS = -lboost_regex
+OBJS = BasicTreeWalker.o
+PROGRAM = BasicTreeWalker.out
 
 all:$(PROGRAM)
 

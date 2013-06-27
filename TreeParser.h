@@ -2,8 +2,8 @@
 //TreeParser:20130611
 #include <iostream>
 #include <boost/format.hpp>
-#include "Lexer.h"
-#include "SyntaxTree.h"
+#include "Token.h"
+#include "BasicTree.h"
 
 namespace semantia
 {
@@ -20,26 +20,33 @@ private:
 	const std::string message_;
 };
 
-class TreeParser{
+template<class Value>
+class BasicTreeParser{
 public:
-    TreeParser(const parsia::SyntaxTree::Ptr& root) : 
+	using Tree = BasicTree<Value>;
+    BasicTreeParser(const typename Tree::Ptr& root) : 
 		partial_tree_path_(1, root), child_index_list_(1, 0){} 
 
-	auto DebugPrint() -> void {
+	auto DebugPrint(const typename Tree::ValueToString& value_to_string) -> void {
 		for(const auto partial_node : partial_tree_path_){
-			std::cout << partial_node->GetToken().GetWord() << " ";
+			std::cout << partial_node->ToString(value_to_string) << " ";
 		}
 		std::cout << std::endl;
 	}
 
-	auto StepDown(unsigned int child_index=0) -> parsia::SyntaxTree::Ptr {
+	auto DebugPrint(const std::string& message) -> void {
+		std::cout << message << std::endl;	
+	}
+
+	auto StepDown(unsigned int child_index=0) -> typename Tree::Ptr {
+		DebugPrint("stepdown");
 		auto current_node = partial_tree_path_.back();
-		auto child = current_node->GetChildNode(child_index);
+		auto child = current_node->GetChild(child_index);
 		if(!child){
 			auto error_message = boost::format(
 				"TreeSyntaxError: invalid child access."
 				"(no index=\"%1%\" child in tree \"%2%\".)");
-			error_message % child_index % current_node->ToString();
+			error_message % child_index % current_node;
 			throw TreeSyntaxError(error_message.str());
 		}
 		partial_tree_path_.push_back(child);
@@ -47,7 +54,8 @@ public:
 		return partial_tree_path_.back();
 	}
 
-	auto StepUp() -> parsia::SyntaxTree::Ptr {
+	auto StepUp() -> typename Tree::Ptr {
+		DebugPrint("stepup");
 		if(partial_tree_path_.size() == 1){
 			throw TreeSyntaxError(
 				"TreeSyntaxError: invalid parent access.(here is top node.)");	
@@ -58,12 +66,15 @@ public:
 		return partial_tree_path_.back();
 	}
 
-	auto StepNext() -> parsia::SyntaxTree::Ptr {
+	auto StepNext() -> typename Tree::Ptr {
+		//DebugPrint("stepnext");
+		std::cout << child_index_list_.back()+1 << std::endl;
+		auto temp = child_index_list_.back();
 		StepUp();
-		return StepDown(child_index_list_.back()+1);
+		return StepDown(temp+1);
 	}
 
-	auto Match(const lexia::TokenType& type) -> parsia::SyntaxTree::Ptr {
+	auto Match(const TokenType& type) -> typename Tree::Ptr {
 		if(partial_tree_path_.back()->GetToken().GetType() != type){
 			throw TreeSyntaxError("TreeSyntaxError: type does not match.");	
 		}	
@@ -71,7 +82,7 @@ public:
 	}
 
 private:
-	std::vector<parsia::SyntaxTree::Ptr> partial_tree_path_;
+	std::vector<typename Tree::Ptr> partial_tree_path_;
 	std::vector<unsigned int> child_index_list_;
 };
 }

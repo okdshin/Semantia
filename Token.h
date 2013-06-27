@@ -52,6 +52,14 @@ public:
 	Token(const TokenType& type, const Word& word) 
 		: type_(type), word_(word){}
 	
+	static auto STEP_DOWN_TOKEN() -> Token {
+		return Token(TokenType("SEMANTIA_STEP_DOWN"), Word("STEP_DOWN"));
+	}
+	
+	static auto STEP_UP_TOKEN() -> Token {
+		return Token(TokenType("SEMANTIA_STEP_UP"), Word("STEP_UP"));
+	}
+
 	auto GetType()const -> TokenType {
 		return type_;
 	}
@@ -66,7 +74,8 @@ private:
 };
 
 auto operator<<(std::ostream& os, const Token& token) -> std::ostream& {
-	os << "Token:" << token.GetType() << ", " << token.GetWord();
+	//os << "Token:" << token.GetType() << ", " << token.GetWord();
+	os << "[" << token.GetWord().ToString() << "]";
 	return os;	
 }
 

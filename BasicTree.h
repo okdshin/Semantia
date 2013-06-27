@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <cassert>
+#include <boost/lexical_cast.hpp>
 
 namespace semantia
 {
@@ -25,15 +27,32 @@ public:
 		return Ptr(new BasicTree<Value>(token));		
 	}
 
+	auto GetValue()const -> Value {
+		return value_;	
+	}
+
 	auto AddChild(const BasicTree::Ptr& child_node) -> void {
 		child_tree_list_.push_back(child_node);
 	}
 
-	auto IsNil() -> bool {
+	auto GetChild(unsigned int index)const -> Ptr {
+		assert(0 <= index);
+		if(child_tree_list_.size() <= index){
+			return Ptr();	
+		}
+		return child_tree_list_.at(index);	
+	}
+
+	auto IsNil()const -> bool {
 		return value_ == Value();
 	}
 
-	auto ToString(const ValueToString& value_to_string) -> std::string {
+	auto ToString()const -> std::string {
+		return ToString([](const Value& value) -> std::string { 
+			return boost::lexical_cast<std::string>(value); });
+	}
+	
+	auto ToString(const ValueToString& value_to_string)const -> std::string {
 		if(child_tree_list_.empty()){
 			return value_to_string(value_);
 		}
@@ -64,6 +83,11 @@ private:
 
 	Value value_;
 	std::vector<BasicTree::Ptr> child_tree_list_;
-
 };
+
+template<class Value>
+auto operator<<(std::ostream& os, const BasicTree<Value>& tree) -> std::ostream& {
+	os << tree.ToString();
+	return os;
+}
 }

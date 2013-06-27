@@ -8,35 +8,46 @@ using namespace semantia;
 
 int main(int argc, char* argv[])
 {
+	using Tree = BasicTree<Token>;
 	try{
-		auto plus = parsia::SyntaxTree::Create(
-			lexia::Token(lexia::TokenType::PLUS(), lexia::Word("+")));
-		auto a = parsia::SyntaxTree::Create(
-			lexia::Token(lexia::TokenType::IDENTIFIER(), lexia::Word("a")));
-		auto minus = parsia::SyntaxTree::Create(
-			lexia::Token(lexia::TokenType::MINUS(), lexia::Word("-")));
-		auto b = parsia::SyntaxTree::Create(
-			lexia::Token(lexia::TokenType::IDENTIFIER(), lexia::Word("b")));
-		auto c = parsia::SyntaxTree::Create(
-			lexia::Token(lexia::TokenType::IDENTIFIER(), lexia::Word("c")));
-		plus->AddChildNode(minus);
-		plus->AddChildNode(a);
-		minus->AddChildNode(b);
-		b->AddChildNode(c);
+		auto plus = Tree::Create(
+			Token(TokenType("PLUS"), Word("+")));
+		auto a = Tree::Create(
+			Token(TokenType("IDENTIFIER"), Word("a")));
+		auto minus = Tree::Create(
+			Token(TokenType("MINUS"), Word("-")));
+		auto b = Tree::Create(
+			Token(TokenType("IDENTIFIER"), Word("b")));
+		auto c = Tree::Create(
+			Token(TokenType("IDENTIFIER"), Word("c")));
+		plus->AddChild(minus);
+		plus->AddChild(a);
+		plus->AddChild(b);
+		plus->AddChild(c);
 
 
-		std::cout << plus->ToString() << std::endl;
+		auto value_to_string = typename Tree::ValueToString(
+			[](const Token& token){ return token.GetWord().ToString(); });
+		//std::cout << plus->ToString(value_to_string) << std::endl;
 
-		TreeParser tree_parser(plus);
-		tree_parser.DebugPrint();
-		tree_parser.StepDown(0);
-		tree_parser.DebugPrint();
-		tree_parser.DebugPrint();
+		BasicTreeParser<Token> tree_parser(plus);
+		std::cout << "all: ";tree_parser.DebugPrint(value_to_string);
+		//tree_parser.StepDown(0);
+		//tree_parser.StepDown(0);
+		tree_parser.StepDown();
+		tree_parser.DebugPrint(value_to_string);
 		tree_parser.StepUp();
+		tree_parser.DebugPrint(value_to_string);
+		tree_parser.StepDown();
+		tree_parser.DebugPrint(value_to_string);
 		tree_parser.StepNext();
-		tree_parser.DebugPrint();
-		tree_parser.StepDown(1);
-		tree_parser.DebugPrint();
+		tree_parser.DebugPrint(value_to_string);
+		tree_parser.StepNext();
+		tree_parser.DebugPrint(value_to_string);
+		tree_parser.StepNext();
+		tree_parser.DebugPrint(value_to_string);
+		tree_parser.StepNext();
+		tree_parser.DebugPrint(value_to_string);
 	}
 	catch(const TreeSyntaxError& e){
 		std::cout << e.what() << std::endl;
